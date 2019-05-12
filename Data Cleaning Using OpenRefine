@@ -1,0 +1,70 @@
+This is my notes on Open Refine tutorial by Colin Skow.
+
+Terms to be used:
+FACETING
+Breaking data into smaller buckets so that they are easy to work with. Here, we  have used text facets and numeric facets.
+ATOMIZATION
+Splitting multivalued cells into separate cells
+CLUSTERING
+A technique which groups similar data
+
+To get started:
+Start with ./refine in the terminal, choose your file (I have used .tsv file for the purpose), next and create a new project.
+
+STEPS TO CLEAN YOUR DATA 
+STEP 1:
+RecordID --> facet --> numeric facet
+Output: no numeric value present
+TO remove that error:
+RecordID --> Edit Cells --> Common transforms --> Numbers
+
+STEP 2:
+Check the number of empty rows. Removing them:
+All --> Edit rows --> Remove all matching rows
+(close the dialogue box on the extreme left)
+(after every step, close the dialogue box on the left)
+
+STEP 3:
+Remove Duplicates
+RecordID --> Sort --> numbers, smallest first --> OK
+Sort(appears on top) --> Reorder rows permanently (Dont skip this step, it will mess up your steps later)
+
+STEP 4:
+Blank Down : 1st instance of duplicate is intact, remaining ones become blanck cells
+to do it:
+RecordID --> Edit Cells --> Blank Down
+
+STEP 5:
+Remove all rows where RecordID is blank
+RecordID --> facet --> customize facet --> facet by blank --> true (to select rows where RecordID is blank)
+All --> edit Rows --> remove all matching rows
+
+STEP 6:
+Fixing the category
+Category --> Edit cells --> Split multivalued cells --> change separator to '|' because this is what has been used --> OK
+(this step is called atomization)
+we have gone from 43k approx to 93 approx
+
+Category --> facet --> text facet
+You get warning
+Up the limit and set it to 5000 --> OK
+
+We can now see the categories
+
+STEP 7:
+(blank) means no category was specified
+Cluster --> method:key collision; keying function:ngram-fingerprint; ngram size:4
+(in this case, selesct all except the 1st one because its not the matching data)
+
+STEP 8: 
+Categories --> Edit cells --> join multivalued cells --> OK
+
+STEP 9:
+Categories --> edit cells --> transform 
+value.split('|').uniques().join('|')
+{split the values by '|' character, selesct only the unique values and rejoin them using '|' character in a list}
+--> OK
+
+STEP 10:
+export --> tab separated value
+It downloads your clean file and viola!!! you are done :)
